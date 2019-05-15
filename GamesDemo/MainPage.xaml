@@ -1,0 +1,100 @@
+﻿<Page
+    x:Class="GamesDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
+
+
+    <Grid>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/Background.jpg" />
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="20*" />
+        </Grid.RowDefinitions>
+
+        <ContentPresenter
+            x:Name="DetailContentPresenter"
+            Padding="24,0"
+            BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+            BorderThickness="1,0,0,0"
+            Content="{x:Bind _viewModel.SelectedGame, Mode=OneWay}"
+            ContentTemplate="{StaticResource DetailContentTemplate}">
+            <ContentPresenter.ContentTransitions>
+                <!--  Empty by default. See MasterListView_ItemClick  -->
+                <TransitionCollection />
+            </ContentPresenter.ContentTransitions>
+        </ContentPresenter>
+
+        <Border Grid.Row="1">
+            <Controls:Carousel
+                x:Name="CaroTest"
+                VerticalContentAlignment="Center"
+                InvertPositive="True"
+                ItemDepth="300"
+                ItemMargin="12"
+                ItemRotationX="8"
+                ItemRotationY="-2"
+                ItemRotationZ="2"
+                ItemTemplate="{StaticResource photos}"
+                ItemsSource="{x:Bind _viewModel.GamesList, Mode=OneWay}"
+                Orientation="Horizontal"
+                SelectedItem="{Binding SelectedGame, Mode=TwoWay}">
+                <Controls:Carousel.EasingFunction>
+                    <CubicEase EasingMode="EaseOut" />
+                </Controls:Carousel.EasingFunction>
+
+            </Controls:Carousel>
+        </Border>
+
+        <StackPanel
+            Grid.Row="3"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Width="120"
+                Margin="6"
+                Background="#f4bf42"
+                Command="{x:Bind _viewModel.PreviousDayCommand}">
+                Previous Day
+            </Button>
+            <Button
+                Width="120"
+                Margin="6"
+                Background="#f4bf42"
+                Command="{x:Bind _viewModel.NextDayCommand}">
+                Next Day
+            </Button>
+        </StackPanel>
+
+
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Background="#272727"
+            Opacity="0.9"
+            Visibility="{Binding Path=IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <ProgressRing
+                Width="100"
+                Height="100"
+                Foreground="#fcc202"
+                IsActive="True" />
+        </Grid>
+
+    </Grid>
+</Page>
